@@ -20,3 +20,7 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     # You can return a response or perform further processing here
     return {"filename": file.filename}
+
+@app.get("/example")
+async def example(request: Request):
+    return templates.TemplateResponse("example.html", {"request": request}) 
