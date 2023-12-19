@@ -3,6 +3,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from typing import Annotated
+import numpy as np
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -100,32 +102,37 @@ async def report_file(request: Request,
 
     # Print the prediction
     print(f"The model predicts: {'Smoke Detected' if prediction == 1 else 'No Smoke Detected'}")
+    # if prediction == 1:
+    #   from twilio.rest import Client
+
+    #   account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
+    #   auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
+    #   client = Client(account_sid, auth_token)
+
+    #   message = client.messages.create(
+    #     from_='whatsapp:+14155238886',
+    #     body='There is going to be a fire accident in the industry near your location.',
+    #     to='whatsapp:+918688425204'
+    #   )
+    #   prediction_message = "Fire Accident Will occur!"
+
+    # else:
+    #   from twilio.rest import Client
+
+    #   account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
+    #   auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
+    #   client = Client(account_sid, auth_token)
+
+    #   message = client.messages.create(
+    #     from_='whatsapp:+14155238886',
+    #     body='No smoke detected.',
+    #     to='whatsapp:+918688425204'
+    #   )
+    #   prediction_message = "Everything is good"
+
     if prediction == 1:
-      from twilio.rest import Client
-
-      account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
-      auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
-      client = Client(account_sid, auth_token)
-
-      message = client.messages.create(
-        from_='whatsapp:+14155238886',
-        body='There is going to be a fire accident in the industry near your location.',
-        to='whatsapp:+918688425204'
-      )
       prediction_message = "Fire Accident Will occur!"
-
     else:
-      from twilio.rest import Client
-
-      account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
-      auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
-      client = Client(account_sid, auth_token)
-
-      message = client.messages.create(
-        from_='whatsapp:+14155238886',
-        body='NO smoke detected.',
-        to='whatsapp:+918688425204'
-      )
       prediction_message = "Everything is good"
 
     # Need to modify -------------->
