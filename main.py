@@ -1,14 +1,20 @@
-from fastapi import FastAPI, Request, File, UploadFile, Form
+from fastapi import FastAPI, Request, File, UploadFile, Form, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from typing import Annotated
+from pydantic import BaseModel
 import numpy as np
 
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
+data_storage = {"temperature": 40, "humidity": 50}
+class SensorData(BaseModel):
+    temperature: float
+    humidity: float
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
@@ -144,3 +150,34 @@ async def report_file(request: Request,
         {"request": request, 
         "prediction_message": prediction_message}
         )
+
+# @app.post("/upload_sensor_data")
+# async def upload_sensor_data(request: Request):
+#     data = await request.json()
+#     temperature = data.get("temperature")
+#     humidity = data.get("humidity")
+#     print(type(temperature), type(humidity))
+#     print(f"Received data - Temperature: {temperature}, Humidity: {humidity}")
+#     return {"message": f"Data received successfully {temperature}, {humidity}"} 
+#     return templates.TemplateResponse("Analysis.html", 
+#         {"request": request, 
+#         "temperature": str(temperature), "humidity":str(humidity)}
+#         ) 
+    # print(type(temperature), type(humidity))
+    # print(f"Received data - Temperature: {temperature}, Humidity: {humidity}")
+    
+    # return templates.TemplateResponse("Analysis.html", 
+    #     {"request": request, "temperature": temperature, "humidity": humidity}
+    # )
+
+@app.post("/update_sensor_data")
+async def update_sensor_data(sensor_data: SensorData):
+    data_storage["temperature"] = sensor_data.temperature
+    data_storage["humidity"] = sensor_data.humidity
+    return {"message": "Data updated successfully"}
+
+@app.get("/get_sensor_data")
+async def get_sensor_data():
+    if data_storage["temperature"] is None or data_storage["humidity"] is None:
+        raise HTTPException(status_code=404, detail="Data not found")
+    return data_storage    
