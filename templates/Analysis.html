@@ -37,37 +37,30 @@
         removeTable();
         }
 
-        function previewImage(event) {
-            var reader = new FileReader();
-            var imagePreview = document.getElementById("imagePreview");
-            var image = imagePreview.querySelector("img");
-
-            reader.onload = function () {
-            image.src = reader.result;
-            };
-
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        
         function removeTable() {
         var table = document.getElementById("patientTable");
         table.style.display = "none";
         }
 
-        function calculateAge(dob) {
-        var today = new Date();
-        var birthDate = new Date(dob);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
+        function updateMap() {
+            var selectElement = document.getElementById("locationSelect");
+            var iframeElement = document.getElementById("mapIframe");
+            var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+
+            // Update iframe src based on the selected option
+            if(selectedOption === "option1"){
+              iframeElement.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3835014.6514888075!2d81.79537005696577!3d20.170249755038604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a226aece9af3bfd%3A0x133625caa9cea81f!2sOdisha!5e0!3m2!1sen!2sin!4v1702985534510!5m2!1sen!2sin";
+            }
+            else if (selectedOption === "option2") {
+                iframeElement.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59334.74740906257!2d85.5610928523269!3d21.647446650862545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1f0282788c88bb%3A0xcac8ecd818b3fa4d!2sKeonjhar%2C%20Odisha!5e0!3m2!1sen!2sin!4v1702986166869!5m2!1sen!2sin";
+            } else if (selectedOption === "option3") {
+              iframeElement.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d479331.5625660451!2d86.06561809624264!3d20.184973774878625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1bcd3e07a1be23%3A0xedf04bd8503415c0!2sJagatsinghpur%2C%20Odisha!5e0!3m2!1sen!2sin!4v1702986253194!5m2!1sen!2sin";
+            }
+           else if (selectedOption === "option3") {
+              iframeElement.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1905951.2354846525!2d82.45669844450642!3d21.090188656702434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a18a5535b18359d%3A0x1b2ab7d9079949fc!2sAngul%2C%20Odisha!5e0!3m2!1sen!2sin!4v1702986326792!5m2!1sen!2sin";
+            // Add more conditions as needed";
+            }
         }
-        return age;
-        }
-        var dob = '{{patient_dob}}';  // Replace with the actual DOB variable value
-        var ageElement = document.getElementById("age");
-        ageElement.innerText = calculateAge(dob);
             
         </script>
     <title>Form</title>
@@ -83,7 +76,7 @@
    <br>
    <div class="container my-2 w-50 text p-2">
     <center>
-    <select class="row g-3 p-3">
+    <select class="row g-3 p-3" id="locationSelect" onchange="updateMap()">
       <option value="option1">Companies</option>
       <option value="option2">Arrow minerals & metals private limited - Keonjhar district</option>
       <option value="option3">Petrochemical Complex in Paradeep - Jagatsinghpur district </option>
@@ -94,7 +87,7 @@
       <!-- Add more options as needed -->
     </select>
     <br>
-    <iframe row g-3 p-3 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3835014.6514888075!2d81.79537005696577!3d20.170249755038604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a226aece9af3bfd%3A0x133625caa9cea81f!2sOdisha!5e0!3m2!1sen!2sin!4v1702985534510!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>      
+    <iframe id="mapIframe" row g-3 p-3 width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </center>
   </div>
 
