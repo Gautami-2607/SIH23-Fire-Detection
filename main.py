@@ -12,6 +12,10 @@ templates = Jinja2Templates(directory="templates")
 async def dynamic_file(request: Request):
     return templates.TemplateResponse("base.html", {"request": request})
 
+@app.get("/Analysis")
+async def Patient_form(request: Request):
+    return templates.TemplateResponse("Analysis.html", {"request": request})    
+
 @app.post("/uploadfile/")
 async def upload_file(file: UploadFile = File(...)):
     # Do something with the uploaded file
