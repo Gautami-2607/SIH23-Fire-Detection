@@ -85,75 +85,83 @@
 
         <div class="col-md-6">
             <label for="validationDefault01" class="form-label">UTC</label>
-            <input type="text" pattern="[A-Za-z]+" name="UTC" class="form-control" id="validationDefault01" placeholder="UTC" required>
+            <input type="number" pattern="[A-Za-z]+" name="UTC" class="form-control" id="validationDefault01" placeholder="UTC" required>
           </div>
           <div class="col-md-6">
             <label for="validationDefault02" pattern="[A-Za-z]+" class="form-label">Temperature[C]</label>
-            <input type="text" class="form-control" name="Temperature" id="validationDefault02" placeholder="Temperature" required>
+            <input type="number" class="form-control" name="Temperature" id="validationDefault02" placeholder="Temperature" required>
           </div>
 
         <div class="col-md-6">
           <label for="inputEmail4" class="form-label" >Humidity[%]</label>
-          <input type="email" class="form-control" name="Humidity" id="inputEmail4" placeholder="Humidity" required>
+          <input type="number" class="form-control" name="Humidity" id="inputEmail4" placeholder="Humidity" required>
         </div>
 
         <div class="col-md-6">
           <label for="inputEmail4" class="form-label" >TVOC[ppb]</label>
-          <input type="text" class="form-control" name="TVOC" placeholder="TVOC" id="mobile" required>
+          <input type="number" class="form-control" name="TVOC" placeholder="TVOC" id="mobile" required>
         </div>
 
         <div class="col-md-6">
           <label for="inputAddress" class="form-label">eCO2[ppm]</label>
-          <input type="text" class="form-control" name="eCO2" placeholder="eCO2" id="mobile" required>
+          <input type="number" class="form-control" name="eCO2" placeholder="eCO2" id="mobile" required>
         </div>
 
         <div class="col-md-6">
           <label for="inputAddress" class="form-label">Raw H2</label>
-          <input type="text" class="form-control" name="RawH2" placeholder="Raw H2" required>
+          <input type="number" class="form-control" name="RawH2" placeholder="Raw H2" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">Raw Ethanol</label>
-            <input type="text" class="form-control" name="RawEthanol" placeholder="Raw Ethanol" required>
+            <input type="number" class="form-control" name="RawEthanol" placeholder="Raw Ethanol" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">Pressure[hPa]</label>
-            <input type="text" class="form-control" name="Pressure" placeholder="Pressure" required>
+            <input type="number" class="form-control" name="Pressure" placeholder="Pressure" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">PM1.0</label>
-            <input type="text" class="form-control" name="PM1" placeholder="PM1" required>
+            <input type="number" class="form-control" name="PM1" placeholder="PM1" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">PM2.5</label>
-            <input type="text" class="form-control" name="PM2" placeholder="PM2" required>
+            <input type="number" class="form-control" name="PM2" placeholder="PM2" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">NC0.5</label>
-            <input type="text" class="form-control" name="NC0" placeholder="NC0" required>
+            <input type="number" class="form-control" name="NC0" placeholder="NC0" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">NC1.0</label>
-            <input type="text" class="form-control" name="NC1" placeholder="NC1" required>
+            <input type="number" class="form-control" name="NC1" placeholder="NC1" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">NC2.5</label>
-            <input type="text" class="form-control" name="NC2" placeholder="NC2" required>
+            <input type="number" class="form-control" name="NC2" placeholder="NC2" required>
         </div>
 
         <div class="col-md-6">
             <label for="inputAddress" class="form-label">CNT</label>
-            <input type="text" class="form-control" name="CNT" placeholder="CNT" required>
+            <input type="number" class="form-control" name="CNT" placeholder="CNT" required>
         </div>
         
         <button type="submit" class="btn btn-primary" >Submit</button>
+
+        <div class="col-md-6">
+            <center>
+            <label for="inputAddress" >Prediction: {{ prediction_message }}</label>
+            </center>
+        </div>
+
         </form>
+
       </div>
     <br>
 

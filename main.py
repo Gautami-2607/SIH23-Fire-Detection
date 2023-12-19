@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, File, UploadFile, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from typing import Annotated
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -46,26 +47,89 @@ async def upload_image(request: Request, image: UploadFile = File(...)):
 async def read_item(request: Request):
     return templates.TemplateResponse("sensor_form.html", {"request": request})
 
-@app.post("/process_sensor_values/")
-async def process_sensor_values(
-    request: Request,
-    sensor1: float = Form(...),
-    sensor2: float = Form(...),
-    sensor3: float = Form(...),
-):
-    # Calculate average value
-    average_value = (sensor1 + sensor2 + sensor3) / 3
+# @app.post("/process_sensor_values/")
+# async def process_sensor_values(
+#     request: Request,
+#     sensor1: float = Form(...),
+#     sensor2: float = Form(...),
+#     sensor3: float = Form(...),
+# ):
+#     # Calculate average value
+#     average_value = (sensor1 + sensor2 + sensor3) / 3
 
-    # Set the threshold
-    threshold = 5.0  # You can adjust this threshold value
+#     # Set the threshold
+#     threshold = 5.0  # You can adjust this threshold value
 
-    # Display message based on the average value
-    if average_value > threshold:
-        alert_message = "ALERT: Average value is above the threshold!"
+#     # Display message based on the average value
+#     if average_value > threshold:
+#         alert_message = "ALERT: Average value is above the threshold!"
+#     else:
+#         alert_message = "Everything is good."
+
+#     return templates.TemplateResponse(
+#         "result.html",
+#         {"request": request, "average_value": average_value, "alert_message": alert_message},
+#     )
+
+@app.post("/upload")
+async def report_file(request: Request,
+                        UTC: float = Form(...),
+                        Temperature: float = Form(...),
+                        Humidity: float = Form(...),
+                        TVOC: float = Form(...),
+                        eCO2: float = Form(...),
+                        RawH2: float = Form(...),
+                        RawEthanol: float = Form(...),
+                        Pressure: float = Form(...),
+                        PM1: float = Form(...),
+                        PM2: float = Form(...),
+                        NC0: float = Form(...),
+                        NC1: float = Form(...),
+                        NC2: float = Form(...),
+                        CNT: float = Form(...)
+                       ):
+    import joblib
+
+    # Load the model
+    model = joblib.load("smoke_detect_model.joblib")                   
+
+    user_input_array = np.array([[UTC, Temperature, Humidity, TVOC, eCO2, RawH2, RawEthanol, Pressure, PM1, PM2, NC0, NC1, NC2, CNT]])
+
+    # Make prediction
+    prediction = model.predict(user_input_array)[0]
+
+    # Print the prediction
+    print(f"The model predicts: {'Smoke Detected' if prediction == 1 else 'No Smoke Detected'}")
+    if prediction == 1:
+      from twilio.rest import Client
+
+      account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
+      auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
+      client = Client(account_sid, auth_token)
+
+      message = client.messages.create(
+        from_='whatsapp:+14155238886',
+        body='There is going to be a fire accident in the industry near your location.',
+        to='whatsapp:+918688425204'
+      )
+      prediction_message = "Fire Accident Will occur!"
+
     else:
-        alert_message = "Everything is good."
+      from twilio.rest import Client
 
-    return templates.TemplateResponse(
-        "result.html",
-        {"request": request, "average_value": average_value, "alert_message": alert_message},
-    )
+      account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
+      auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
+      client = Client(account_sid, auth_token)
+
+      message = client.messages.create(
+        from_='whatsapp:+14155238886',
+        body='NO smoke detected.',
+        to='whatsapp:+918688425204'
+      )
+      prediction_message = "Everything is good"
+
+    # Need to modify -------------->
+    return templates.TemplateResponse("Analysis.html", 
+        {"request": request, 
+        "prediction_message": prediction_message}
+        )
