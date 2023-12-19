@@ -17,7 +17,11 @@ async def dynamic_file(request: Request):
 
 @app.get("/Analysis")
 async def Patient_form(request: Request):
-    return templates.TemplateResponse("Analysis.html", {"request": request})    
+    return templates.TemplateResponse("Analysis.html", {"request": request})  
+
+@app.get("/Dashboard")
+async def Patient_form(request: Request):
+    return templates.TemplateResponse("Dashboard.html", {"request": request})    
 
 @app.post("/uploadfile/")
 async def upload_file(file: UploadFile = File(...)):
