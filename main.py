@@ -6,7 +6,6 @@ from typing import Annotated
 from pydantic import BaseModel
 import numpy as np
 
-
 app = FastAPI()
 
 data_storage = {"temperature": 40, "humidity": 50}
@@ -113,71 +112,52 @@ async def report_file(request: Request,
     # Print the prediction
     print(f"The model predicts: {'Smoke Detected' if prediction == 1 else 'No Smoke Detected'}")
 
-    # from dotenv import load_dotenv
-    # from twilio.rest import Client
-    # import os
+    #################################
+    from twilio.rest import Client
 
-    # load_dotenv()  # Load variables from .env file
-    # account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-    # auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+    account_sid = 'AC2afb1933523ddf282f4ceb47b3e63ed8'
+    auth_token = '91bf01c478fe165a4b334f4f81a92f1e'
+    client = Client(account_sid, auth_token)
 
-    # if prediction == 1:
-    # #   from twilio.rest import Client
+    message = client.messages.create(
+    from_='whatsapp:+14155238886',
+    body='There is going to be a fire accident in the industry near to your location.',
+    to='whatsapp:+918688425204'
+    )
 
-    # #   account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
-    # #   auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
-    #   client = Client(account_sid, auth_token)
+    print(message.sid)     
 
-    #   message = client.messages.create(
-    #     from_='whatsapp:+14155238886',
-    #     body='There is going to be a fire accident in the industry near your location.',
-    #     to='whatsapp:+918688425204'
-    #   )
-    #   prediction_message = "Fire Accident Will occur!"
-
-    # else:
-    #   from twilio.rest import Client
-
-    #   account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
-    #   auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
-    #   client = Client(account_sid, auth_token)
-
-    #   message = client.messages.create(
-    #     from_='whatsapp:+14155238886',
-    #     body='No smoke detected.',
-    #     to='whatsapp:+918688425204'
-    #   )
-    #   prediction_message = "Everything is good"
+    #################################    
 
     if prediction == 1:
-      prediction_message = "Fire Accident Will occur!"
+        message = client.messages.create(
+        from_='whatsapp:+14155238886',
+        body='There is going to be a fire accident in the industry near to your location.',
+        to='whatsapp:+918688425204'
+        )
+        print(message.sid)
+        prediction_message = "Fire Accident may likely occur!"
+
     else:
-      prediction_message = "Everything is good"
+        message = client.messages.create(
+        from_='whatsapp:+14155238886',
+        body='Everything is good',
+        to='whatsapp:+918688425204'
+        )
+
+        print(message.sid)
+        prediction_message = "Everything is good"
+
+    # if prediction == 1:
+    #   prediction_message = "Fire Accident Will occur!"
+    # else:
+    #   prediction_message = "Everything is good"
 
     # Need to modify -------------->
     return templates.TemplateResponse("Analysis.html", 
         {"request": request, 
         "prediction_message": prediction_message}
         )
-
-# @app.post("/upload_sensor_data")
-# async def upload_sensor_data(request: Request):
-#     data = await request.json()
-#     temperature = data.get("temperature")
-#     humidity = data.get("humidity")
-#     print(type(temperature), type(humidity))
-#     print(f"Received data - Temperature: {temperature}, Humidity: {humidity}")
-#     return {"message": f"Data received successfully {temperature}, {humidity}"} 
-#     return templates.TemplateResponse("Analysis.html", 
-#         {"request": request, 
-#         "temperature": str(temperature), "humidity":str(humidity)}
-#         ) 
-    # print(type(temperature), type(humidity))
-    # print(f"Received data - Temperature: {temperature}, Humidity: {humidity}")
-    
-    # return templates.TemplateResponse("Analysis.html", 
-    #     {"request": request, "temperature": temperature, "humidity": humidity}
-    # )
 
 @app.post("/update_sensor_data")
 async def update_sensor_data(sensor_data: SensorData):
