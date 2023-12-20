@@ -112,11 +112,20 @@ async def report_file(request: Request,
 
     # Print the prediction
     print(f"The model predicts: {'Smoke Detected' if prediction == 1 else 'No Smoke Detected'}")
-    # if prediction == 1:
-    #   from twilio.rest import Client
 
-    #   account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
-    #   auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
+    # from dotenv import load_dotenv
+    # from twilio.rest import Client
+    # import os
+
+    # load_dotenv()  # Load variables from .env file
+    # account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    # auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+
+    # if prediction == 1:
+    # #   from twilio.rest import Client
+
+    # #   account_sid = 'ACaee2f7670275fb8bcd7c1aa143995fb4'
+    # #   auth_token = 'b2beeb85065aad18d2e116b2e90e862f'
     #   client = Client(account_sid, auth_token)
 
     #   message = client.messages.create(

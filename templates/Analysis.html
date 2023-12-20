@@ -3,6 +3,39 @@
 <!doctype html>
 <html lang="en">
   <head>
+
+    <style>
+      #temperatureStatus,
+      #humidityStatus {
+        font-weight: bold;
+      }
+
+      .fire {
+        color: red;
+      }
+
+      .normal {
+        color: green;
+      }
+
+      .fire-button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    
+      .fire-status {
+        color: red;
+        font-weight: bold;
+      }
+
+    </style>
+
+
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -98,8 +131,44 @@
               })
               .catch(error=>console.error('Error fetching data:', error));
       }
-      // Fetch data every 5 seconds
-      setInterval(fetchDataAndUpdatePage, 5000);
+
+
+      function updateStatus() {
+
+        var fireButton = document.getElementById('fireButton');
+
+        var temperatureElement = document.getElementById('temperature');
+        var humidityElement = document.getElementById('humidity');
+        var temperatureStatusElement = document.getElementById('temperatureStatus');
+        var humidityStatusElement = document.getElementById('humidityStatus');
+
+        var temperature = parseFloat(temperatureElement.textContent);
+        var humidity = parseFloat(humidityElement.textContent);
+
+        // Check temperature and update status
+        if (temperature > 30) {
+          temperatureStatusElement.textContent = 'Alert! Fire accident likely to occur';
+          temperatureStatusElement.className = 'fire';
+          fireButton.textContent = temperatureStatusElement.textContent;
+          fireButton.style.display = 'block';
+        } else {
+          temperatureStatusElement.textContent = 'Everything is good';
+          temperatureStatusElement.className = 'normal';
+          fireButton.style.display = 'none';
+        }
+
+        // Check humidity and update status
+        // (you can add similar logic for humidity if needed)
+
+        // Example logic for humidity:
+        
+      }
+
+      // Fetch data and update page every 5 seconds
+      setInterval(function() {
+        fetchDataAndUpdatePage();
+        updateStatus();
+      }, 5000);
             
         </script>
     <title>Form</title>
@@ -129,7 +198,13 @@
     <iframe id="mapIframe" row g-3 p-3 width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </center>
   </div>
-
+  <br>
+  <center>
+  <div class="container my-2 w-50 text p-2">
+    <h4>Temperature: <span id="temperature"></span>°C <span id="temperatureStatus"></span></h4>
+   <h4>Humidity: <span id="humidity"></span>% </h4>
+   </div>
+  </center> 
 
    <br>
    <br>
@@ -232,10 +307,6 @@
    <br>
    <br>
 
-   <div class="container my-2 w-50 text p-2">
-    <p>Temperature: <span id="temperature"></span>°C</p>
-   <p>Humidity: <span id="humidity"></span>%</p>
-   </div>
 
    <div class="row">
     <footer>
